@@ -1,0 +1,34 @@
+{
+  "name": "svn-scraper",
+  "version": "0.1.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "contributors": [
+    "Mathieu Albrespy <mathieu.albrespy@gmail.com>"
+  ],
+  "license": "Proprietary",
+  "dependencies": {
+    "async": "^1.5.0",
+    "child-process-promise": "^2.2.1",
+    "co": "^4.6.0",
+    "cron": "^1.1.0",
+    "lodash": "^4.11.1",
+    "mongodb": "^2.0.48",
+    "request": "^2.65.0",
+    "superagent": "^3.8.3"
+  },
+  "devDependencies": {
+    "ajv": "^6.5.2",
+    "ajv-keywords": "^3.2.0",
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.10.0",
+    "jshint": "^2.9.3",
+    "popper.js": "^1.14.3"
+  }
+}
