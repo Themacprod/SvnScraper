@@ -23,7 +23,7 @@ const getCommitRange = function (range) {
 
     svnCmd += `svn log -r ${range.max}:${range.min} `;
     svnCmd += getSvnBaseCmd();
-    svnCmd += ` ${process.env.SS_SVN_BASE_REPO}`;
+    svnCmd += ` svn:${process.env.SS_SVN_BASE_REPO}`;
     svnCmd += ' -q';
 
     return new Promise((resolve, reject) => {
@@ -113,7 +113,7 @@ module.exports.getCommits = function getCommits(minRev, maxRev, callback) {
 module.exports.getHead = function getHead(callback) {
     let svnCmd = '';
     svnCmd += 'svn info';
-    svnCmd += ` ${process.env.SS_SVN_BASE_REPO}`;
+    svnCmd += ` svn:${process.env.SS_SVN_BASE_REPO}`;
     const RevStr = 'Last Changed Rev: ';
 
     promiseSpawn.exec(`${svnCmd} | grep '${RevStr}'`)
@@ -139,7 +139,7 @@ module.exports.getFilterTree = function getFilterTree(branch, revision) {
 
     let svnCmd = '';
     svnCmd += 'svn list';
-    svnCmd += ` "${process.env.SS_SVN_BASE_REPO}/${branchFixed}/ExternalDeviceLayer@${revision}" `;
+    svnCmd += ` "svn:${process.env.SS_SVN_BASE_REPO}/${branchFixed}/ExternalDeviceLayer@${revision}" `;
     svnCmd += getSvnBaseCmd();
     svnCmd += '--depth infinity';
 
@@ -163,23 +163,6 @@ module.exports.getFilterTree = function getFilterTree(branch, revision) {
     });
 };
 
-// AppLayer
-// Base
-// BuildMachine
-// buildruntime
-// Common
-// DeviceLayer
-// Documentation
-// DriverWindows
-// ExternalDeviceLayer
-// Firmware
-// HwRegisters
-// LiberatusLayer
-// OglInterface
-// OsUtil
-// Tests
-// Tools
-// XmslLib
 const isBaseFolder = function isBaseFolder(line) {
     const splitWords = line.split('/');
     const keywords = [
@@ -217,7 +200,7 @@ module.exports.getBranchPath = function getBranchPath(revision) {
     let svnCmd = '';
     svnCmd += `svn log -r ${revision}:0 --limit 1 `;
     svnCmd += getSvnBaseCmd();
-    svnCmd += ` ${process.env.SS_SVN_BASE_REPO}`;
+    svnCmd += ` svn:${process.env.SS_SVN_BASE_REPO}`;
     svnCmd += ' --verbose';
 
     return new Promise((resolve) => {
