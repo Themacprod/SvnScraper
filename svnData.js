@@ -110,9 +110,9 @@ module.exports.getCommits = function getCommits(minRev, maxRev, callback) {
     }
 };
 
-
 module.exports.getHead = function getHead(callback) {
-    let svnCmd = 'svn info';
+    let svnCmd = '';
+    svnCmd += 'svn info';
     svnCmd += ` ${process.env.SS_SVN_BASE_REPO}`;
     const RevStr = 'Last Changed Rev: ';
 

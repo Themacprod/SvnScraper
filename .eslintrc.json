@@ -1,29 +1,29 @@
 {
-    "extends": [
-        "eslint:all",
-        "airbnb"
-    ],
-    "env": {
-        "browser": true,
-        "node": true,
-        "es6": true
-    },
-    "parserOptions": {
-        "ecmaVersion": 6
-    },
-    "rules": {
-        "comma-dangle": ["error", {
-            "arrays": "always",
-            "objects": "never",
-            "imports": "always",
-            "exports": "always",
-            "functions": "ignore"
-        }],
-        "func-names": ["error", "as-needed"],
-        "indent": ["error", 4],
-        "linebreak-style": ["error", "windows"],
-        "no-console": "off",
-        "object-shorthand": "off",
-        "arrow-body-style": "off"
-    }
+	"extends": [
+		"eslint:all",
+		"airbnb"
+	],
+	"env": {
+		"browser": true,
+		"node": true,
+		"es6": true
+	},
+	"parserOptions": {
+		"ecmaVersion": 6
+	},
+	"rules": {
+		"comma-dangle": ["error", {
+			"arrays": "always",
+			"objects": "never",
+			"imports": "always",
+			"exports": "always",
+			"functions": "ignore"
+		}],
+		"func-names": ["error", "as-needed"],
+		"indent": ["error", 4],
+		"linebreak-style": ["error", "windows"],
+		"no-console": "off",
+		"object-shorthand": "off",
+		"arrow-body-style": "off"
+	}
 }
