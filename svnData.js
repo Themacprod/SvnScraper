@@ -10,14 +10,6 @@ const getSvnBaseCmd = function () {
     return svnCmd;
 };
 
-Array.prototype.contains = function (obj) {
-    return this.indexOf(obj) > -1;
-};
-
-const isValidFile = function (file) {
-    return ['cpp', 'c', 'h', 'inl'].contains(file);
-};
-
 const getCommitRange = function (range) {
     let svnCmd = '';
 
@@ -143,18 +135,16 @@ module.exports.getFilterTree = function getFilterTree(branch, revision) {
     svnCmd += getSvnBaseCmd();
     svnCmd += '--depth infinity';
 
+    svnCmd += ' | grep ';
+    svnCmd += ' -e ".cpp"';
+    svnCmd += ' -e ".c"';
+    svnCmd += ' -e ".h"';
+    svnCmd += ' -e ".inl"';
+
     return new Promise((resolve) => {
         promiseSpawn.exec(svnCmd)
             .then((result) => {
-                const files = _.compact(result.stdout.split(/\r?\n/));
-
-                const filterTree = _.filter(files, (file) => {
-                    const tmp = file.substring(file.length - 4);
-                    const ext = tmp.split('.');
-                    return isValidFile(ext[1]);
-                });
-
-                resolve(filterTree);
+                resolve(_.compact(result.stdout.split(/\r?\n/)));
             })
             .catch((err) => {
                 logger.error(`getFilterTree err : ${err}`);
@@ -206,65 +196,34 @@ module.exports.getBranchPath = function getBranchPath(revision) {
     return new Promise((resolve) => {
         promiseSpawn.exec(svnCmd)
             .then((result) => {
+                const keywords = [
+                    '   A /Mediaprocessor/SV2/',
+                    '   D /Mediaprocessor/SV2/',
+                    '   M /Mediaprocessor/SV2/',
+                ];
+
                 const tmp = _.find(result.stdout.split(/\r?\n/), (line) => {
-                    let startStr = '';
-
-                    startStr = '   M /Mediaprocessor/SV2/';
-                    if (line.indexOf(startStr) !== -1) {
-                        const lineStr = line.substr(startStr.length);
-                        return isBaseFolder(lineStr);
+                    for (let keywordIdx = 0; keywordIdx < keywords.length; keywordIdx += 1) {
+                        if (line.indexOf(keywords[keywordIdx]) !== -1) {
+                            const lineStr = line.substr(keywords[keywordIdx].length);
+                            return isBaseFolder(lineStr);
+                        }
                     }
-
-                    startStr = '   D /Mediaprocessor/SV2/';
-                    if (line.indexOf(startStr) !== -1) {
-                        const lineStr = line.substr(startStr.length);
-                        return isBaseFolder(lineStr);
-                    }
-
-                    startStr = '   A /Mediaprocessor/SV2/';
-                    if (line.indexOf(startStr) !== -1) {
-                        const lineStr = line.substr(startStr.length);
-                        return isBaseFolder(lineStr);
-                    }
-
                     return false;
                 });
 
                 if (tmp) {
-                    let startStr = '   M /Mediaprocessor/SV2/';
-                    if (tmp.indexOf(startStr) !== -1) {
-                        const lineStr = tmp.substr(startStr.length);
-                        const folderFound = isBaseFolder(lineStr);
+                    for (let keywordIdx = 0; keywordIdx < keywords.length; keywordIdx += 1) {
+                        if (tmp.indexOf(keywords[keywordIdx]) !== -1) {
+                            const lineStr = tmp.substr(keywords[keywordIdx].length);
+                            const folderFound = isBaseFolder(lineStr);
 
-                        if (folderFound) {
-                            resolve(lineStr.substr(0, lineStr.indexOf(folderFound)));
+                            if (folderFound) {
+                                resolve(lineStr.substr(0, lineStr.indexOf(folderFound)));
+                            }
+
+                            resolve(null);
                         }
-
-                        resolve(null);
-                    }
-
-                    startStr = '   D /Mediaprocessor/SV2/';
-                    if (tmp.indexOf(startStr) !== -1) {
-                        const lineStr = tmp.substr(startStr.length);
-                        const folderFound = isBaseFolder(lineStr);
-
-                        if (folderFound) {
-                            resolve(lineStr.substr(0, lineStr.indexOf(folderFound)));
-                        }
-
-                        resolve(null);
-                    }
-
-                    startStr = '   A /Mediaprocessor/SV2/';
-                    if (tmp.indexOf(startStr) !== -1) {
-                        const lineStr = tmp.substr(startStr.length);
-                        const folderFound = isBaseFolder(lineStr);
-
-                        if (folderFound) {
-                            resolve(lineStr.substr(0, lineStr.indexOf(folderFound)));
-                        }
-
-                        resolve(null);
                     }
 
                     resolve(null);

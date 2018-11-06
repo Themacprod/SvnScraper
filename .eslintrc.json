@@ -19,11 +19,12 @@
 			"exports": "always",
 			"functions": "ignore"
 		}],
+		"arrow-body-style": "off",
 		"func-names": ["error", "as-needed"],
 		"indent": ["error", 4],
 		"linebreak-style": ["error", "windows"],
 		"no-console": "off",
-		"object-shorthand": "off",
-		"arrow-body-style": "off"
+		"no-underscore-dangle": "off",
+		"object-shorthand": "off"
 	}
 }
