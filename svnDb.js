@@ -8,11 +8,8 @@ const logger = require('./logger');
 const getLatestCommit = function () {
     return new Promise((resolve, reject) => {
         database.commits
-            .find({
-            })
-            .sort({
-                value: -1
-            })
+            .find({})
+            .sort({ value: -1 })
             .limit(1)
             .toArray((err, docs) => {
                 if (err) {
@@ -291,9 +288,6 @@ const getBranch = function getBranch(branchId) {
 module.exports.getBranch = getBranch;
 
 function* AddRevision(revision) {
-    // logger.log(`--------------------------------------------------------------`);
-    // logger.log(`Collection commits : Adding revision ${revision} in DB...`);
-
     //
     // Branch
     //
